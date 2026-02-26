@@ -1,0 +1,32 @@
+name: OSINT Background Scraper
+
+on:
+  # schedule:
+  #   - cron: '0 * * * *'  # This would run it every hour. Keep commented for now.
+  workflow_dispatch:      # Allows you to trigger it manually via the Actions tab
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        run: pip install requests
+
+      - name: Run Scraper
+        run: python fetcher.py
+
+      - name: Commit and Push Data
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add data/aircraft.json data/satellites.txt
+          git commit -m "Update Intel: $(date)" || exit 0
+          git push

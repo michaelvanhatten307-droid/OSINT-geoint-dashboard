@@ -2,3 +2,7 @@ streamlit
 pandas
 folium
 streamlit-folium
+requests
+skyfield
+numpy
+pandas-geojson
